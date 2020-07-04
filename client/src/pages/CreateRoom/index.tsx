@@ -24,7 +24,7 @@ import "@ionic/react/css/normalize.css";
 import "@ionic/react/css/structure.css";
 import "@ionic/react/css/typography.css";
 import './styles.css';
-import * as cordinator from "../../services/cordinator";
+import * as settingsService from "../../services/room-settings";
 
 let initialValues = {
   roomName: "Room ABC",
@@ -43,22 +43,25 @@ const CreateRoom = ({history}) => {
     mode: "onChange"
   });
 
-  const [toasterMessage, setToasterMessage] = useState("");
-  const [showErrorToast, setErrorToast] = useState(false);
+  const [ toasterMessage, setToasterMessage ] = useState("");
+  const [ showErrorToast, setErrorToast ] = useState(false);
 
-  const onSubmit = (data: any) => {
+  const onSubmit = async (data: any) => {
     if (Object.keys(errors).length) {
-      console.log(errors)
-      const x = Object.keys(errors).map(f => errors[f].message || `${f} is required`).toString()
+      const x = Object.keys(errors)
+        .map(f => errors[f].message || `${f} is required`).toString()
+
       setToasterMessage(x)
       setErrorToast(true)
+      
       return
     }
     const timestamp = new Date().getTime();
 
-    const roomId = `${data.roomName.toLowerCase().replace (/\s/g, '-')}-${timestamp}`
+    const roomId = `${data.roomName.toLowerCase()
+      .replace (/\s/g, '-')}-${timestamp}`
 
-    cordinator.saveRoomSettings(data, roomId)
+    await settingsService.saveRoomSettings(data, roomId)
 
     history.push(`/room/${roomId}`);
   };

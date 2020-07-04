@@ -12,7 +12,8 @@ import {
 } from '@ionic/react';
 
 import ActivePlayers from '../ActivePlayers';
-import * as cordinator from "../../services/cordinator";
+import * as settingsService from "../../services/room-settings";
+import * as playerService from "../../services/player";
 
 import './styles.css';
 import Arena from '../Arena';
@@ -29,8 +30,8 @@ const Playground = () => {
   useEffect(() => {
     const getSettings = async () => {
       const [settingsResponse, activePlayersResponse] = await Promise.all([
-        cordinator.getRoomSettings(roomId),
-        cordinator.getActivePlayers(roomId)
+        settingsService.getRoomSettings(roomId),
+        playerService.getActivePlayers(roomId)
       ])
 
       setSettings(settingsResponse)
@@ -42,7 +43,7 @@ const Playground = () => {
   }, [])
 
   const registerPlayer = async () => {
-    const activePlayersList = await cordinator.registerPlayer(username, roomId);
+    const activePlayersList = await playerService.registerPlayer(username, roomId);
 
     setActivePlayers(activePlayersList)
     setCurrentUser(username)
