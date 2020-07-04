@@ -23,16 +23,17 @@ import "@ionic/react/css/core.css";
 import "@ionic/react/css/normalize.css";
 import "@ionic/react/css/structure.css";
 import "@ionic/react/css/typography.css";
-import './CreateRoom.css';
+import "./CreateRoom.css";
 
 let initialValues = {
-  roomName: "",
+  roomName: "Room ABC",
   villagers: 3,
   mafia: 2,
   doctor: 1,
   cop: 1,
   nightCycleDuration: 5,
-  dayCycleDuration: 10
+  dayCycleDuration: 10,
+  captain: "ABC"
 };
 
 const CreateRoom = ({history}) => {
@@ -81,14 +82,25 @@ const CreateRoom = ({history}) => {
           <IonCardContent>
             <form onSubmit={handleSubmit(onSubmit)} style={{ padding: 18 }}>
 
-              <IonItem>
-                <IonLabel slot="start">Enter a room name:</IonLabel>
+            <IonItem>
+                <IonLabel slot="start">Your name captain:</IonLabel>
                 <Controller
                   as={IonInput}
                   control={control}
                   class="input"
                   onIonChange={(e: any) => setValue("roomName", e.detail.value)}
                   name="roomName"
+                />
+              </IonItem>
+
+              <IonItem>
+                <IonLabel slot="start">Your room name:</IonLabel>
+                <Controller
+                  as={IonInput}
+                  control={control}
+                  class="input"
+                  onIonChange={(e: any) => setValue("captain", e.detail.value)}
+                  name="captain"
                 />
               </IonItem>
 

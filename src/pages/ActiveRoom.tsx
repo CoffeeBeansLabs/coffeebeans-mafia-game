@@ -1,6 +1,5 @@
 import React from 'react';
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import ExploreContainer from '../components/ExploreContainer';
 import './ActiveRoom.css';
 
 const Tab3: React.FC = () => {
@@ -17,7 +16,11 @@ const Tab3: React.FC = () => {
             <IonTitle size="large">Room</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <ExploreContainer name="Welcome" />
+        <IonContent>
+          <div className="container">
+            <p>Active players: 1</p>
+          </div>
+        </IonContent>
       </IonContent>
     </IonPage>
   );
