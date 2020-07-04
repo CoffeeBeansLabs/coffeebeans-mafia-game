@@ -20,11 +20,6 @@
   background-color: #ffffff;
 }
 
-.actions {
-  border-left: 1px solid #eaeaea;
-  background-color: #ffffff;
-}
-
 .timer-wrapper {
   display: flex;
   justify-content: center;

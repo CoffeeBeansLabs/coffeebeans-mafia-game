@@ -3,11 +3,11 @@ import PropTypes from 'prop-types'
 import { IonButton } from '@ionic/react';
 import * as cordinator from '../../services/cordinator'
 import VideoContainer from '../VideoContainer'
-import { getInstructionBasedOnCharacter } from './actions'
+import { getInstructionBasedOnCharacter } from '../Actions/actions'
 
 import './styles.css'
 
-const Arena = ({ players, minPlayers, roomId, switchCycle, getCurrentCycle }) => {
+const Arena = ({ players, minPlayers, roomId, switchCycle }) => {
   const [currentUser, setCurrentUser] = useState({ name: '', character: '' })
   const [captain, setCaptain] = useState({ name: '' })
   const [startGame, setStartGame] = useState(false)
@@ -34,7 +34,6 @@ const Arena = ({ players, minPlayers, roomId, switchCycle, getCurrentCycle }) =>
       {startGame ? (
         <>
           <span className="instruction">Hi {currentUser.name}! Your role is {currentUser.character.toUpperCase()}</span>
-          {getInstructionBasedOnCharacter(currentUser.character, getCurrentCycle())}
           <VideoContainer />
         </>
       ) :

@@ -203,6 +203,7 @@ const CreateRoom = ({history}) => {
                   onIonChange={e => setValue("dayCycleDuration", e.detail.value)}
                 />
               </IonItem>
+              
               <IonButton type="submit" color="danger">
                 Let's play!
               </IonButton>

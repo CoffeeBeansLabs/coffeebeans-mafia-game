@@ -9,17 +9,16 @@ import {
   IonInput,
   IonFabButton,
   IonFab,
-  IonChip,
-  IonLabel,
   IonButton,
   IonButtons,
-  IonIcon,
 } from '@ionic/react';
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
 
 import ActivePlayers from '../ActivePlayers';
+import Actions from '../Actions';
 import * as settingsService from "../../services/room-settings";
 import * as playerService from "../../services/player";
+import { saveAction } from "../../services/action";
 
 import './styles.css';
 import Arena from '../Arena';
@@ -69,24 +68,22 @@ const Playground = () => {
   }
 
   const switchCycle = () => {
-
     if (!currentCycle || currentCycle === GAME_CYCLES.dayCycleDuration) {
-      setTimerDuration(Number(settings.nightCycleDuration) * 60)
+
       setCurrentCycle(GAME_CYCLES.nightCycleDuration)
+      setTimerDuration(Number(settings.nightCycleDuration) * 60)
     } else {
 
-      console.log('settings.dayCycleDuration', settings.dayCycleDuration)
-      setTimerDuration(Number(settings.dayCycleDuration) * 60)
       setCurrentCycle(GAME_CYCLES.dayCycleDuration)
+      setTimerDuration(Number(settings.dayCycleDuration) * 60)
     }
 
     setTimerOn(true)
   }
 
-  const getCycle = () => {
-    return currentCycle;
+  const savePlayerAction = (votedPalyer) => {
+    console.log(votedPalyer)
   }
-
 
   if (!currentUser) {
     return (
@@ -126,13 +123,13 @@ const Playground = () => {
                     colors={[['#A30000']]}
                     onComplete={() => {
                       switchCycle()
-                      return [true, 2000]
+                      return [true, 3000]
                     }}
                   >{renderTime}
                   </CountdownCircleTimer>
                 </div>
               ) : null}
-            </IonButtons>
+            </IonButtons> 
             <IonTitle>Room</IonTitle>
           </IonToolbar>
         </IonHeader>
@@ -150,15 +147,15 @@ const Playground = () => {
               minPlayers={settings.minRequiredPlayers}
               roomId={roomId}
               switchCycle={switchCycle}
-              getCurrentCycle={getCycle}
             />
 
-            <div className="actions">
-              <ActivePlayers
-                list={activePlayers}
-                minPlayers={settings.minRequiredPlayers}
-              />
-            </div>
+            {timerOn ?
+              <Actions
+                players={activePlayers}
+                saveAction={savePlayerAction}
+                currentCycle={currentCycle}
+              /> : null
+            }
           </div>
         </IonContent>
       </IonPage>
