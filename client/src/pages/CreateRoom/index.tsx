@@ -23,7 +23,8 @@ import "@ionic/react/css/core.css";
 import "@ionic/react/css/normalize.css";
 import "@ionic/react/css/structure.css";
 import "@ionic/react/css/typography.css";
-import "./CreateRoom.css";
+import './styles.css';
+import * as cordinator from "../../services/cordinator";
 
 let initialValues = {
   roomName: "Room ABC",
@@ -44,7 +45,6 @@ const CreateRoom = ({history}) => {
 
   const [toasterMessage, setToasterMessage] = useState("");
   const [showErrorToast, setErrorToast] = useState(false);
-  const [data, setData] = useState();
 
   const onSubmit = (data: any) => {
     if (Object.keys(errors).length) {
@@ -52,12 +52,15 @@ const CreateRoom = ({history}) => {
       const x = Object.keys(errors).map(f => errors[f].message || `${f} is required`).toString()
       setToasterMessage(x)
       setErrorToast(true)
+      return
     }
-
-    setData(data);
     const timestamp = new Date().getTime();
-    console.log(data)
-    history.push(`/room/${data.roomName.toLowerCase().replace (/\s/g, '-')}-${timestamp}`);
+
+    const roomId = `${data.roomName.toLowerCase().replace (/\s/g, '-')}-${timestamp}`
+
+    cordinator.saveRoomSettings(data, roomId)
+
+    history.push(`/room/${roomId}`);
   };
 
   return (
