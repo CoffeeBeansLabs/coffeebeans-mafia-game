@@ -83,7 +83,7 @@ const Playground = () => {
               />
             </div>
 
-            <Arena players={activePlayers} minPlayers={settings.minRequiredPlayers} />
+            <Arena players={activePlayers} minPlayers={settings.minRequiredPlayers} roomId={roomId} />
           </div>
         </IonContent>
       </IonPage>
