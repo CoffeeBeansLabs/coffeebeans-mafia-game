@@ -1,0 +1,21 @@
+.playground {
+  height: 100%;
+  max-height: 100vh;
+  display: grid;
+}
+
+.room--register {
+  align-self: center;
+  justify-self: center;
+}
+
+.room {
+  height: 100%;
+  display: grid;
+  grid-template-columns: minmax(250px, 300px) 1fr;
+}
+
+.stats {
+  border-right: 1px solid #eaeaea;
+  background-color: #ffffff;
+}
