@@ -19,3 +19,15 @@
   border-right: 1px solid #eaeaea;
   background-color: #ffffff;
 }
+
+.timer-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.timer {
+  font-family: "Montserrat";
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
