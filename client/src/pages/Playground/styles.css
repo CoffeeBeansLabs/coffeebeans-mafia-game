@@ -12,11 +12,16 @@
 .room {
   height: 100%;
   display: grid;
-  grid-template-columns: minmax(250px, 300px) 1fr;
+  grid-template-columns: minmax(200px, 250px) 4fr 1fr;
 }
 
 .stats {
   border-right: 1px solid #eaeaea;
+  background-color: #ffffff;
+}
+
+.actions {
+  border-left: 1px solid #eaeaea;
   background-color: #ffffff;
 }
 

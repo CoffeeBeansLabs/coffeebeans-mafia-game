@@ -26,7 +26,7 @@ import Arena from '../Arena';
 
 const GAME_CYCLES = {
   nightCycleDuration: 'NIGHT CYCLE',
-  dayCycleDuration: 'DAY CYCLE'
+  dayCycleDuration: 'DAY CYCLE',
 }
 
 const Playground = () => {
@@ -40,7 +40,7 @@ const Playground = () => {
   })
   const [activePlayers, setActivePlayers] = useState([])
 
-  const [gameCycle, setGameCycle] = useState('');
+  const [currentCycle, setCurrentCycle] = useState('');
   const [timerOn, setTimerOn] = useState(false);
   const [timerDuration, setTimerDuration] = useState(0);
 
@@ -69,19 +69,24 @@ const Playground = () => {
   }
 
   const switchCycle = () => {
-    console.log('settings.nightCycleDuration', settings.nightCycleDuration)
-    if (!gameCycle || gameCycle === GAME_CYCLES.dayCycleDuration) {
-      setTimerDuration(settings.nightCycleDuration)
 
-      setGameCycle(GAME_CYCLES.nightCycleDuration)
+    if (!currentCycle || currentCycle === GAME_CYCLES.dayCycleDuration) {
+      setTimerDuration(Number(settings.nightCycleDuration) * 60)
+      setCurrentCycle(GAME_CYCLES.nightCycleDuration)
     } else {
-      setTimerDuration(settings.dayCycleDuration)
 
-      setGameCycle(GAME_CYCLES.dayCycleDuration)
+      console.log('settings.dayCycleDuration', settings.dayCycleDuration)
+      setTimerDuration(Number(settings.dayCycleDuration) * 60)
+      setCurrentCycle(GAME_CYCLES.dayCycleDuration)
     }
 
     setTimerOn(true)
   }
+
+  const getCycle = () => {
+    return currentCycle;
+  }
+
 
   if (!currentUser) {
     return (
@@ -106,22 +111,26 @@ const Playground = () => {
         <IonHeader>
           <IonToolbar>
             <IonButtons slot="secondary">
+              {}
               <IonButton>
-                {gameCycle}
+                {currentCycle}
               </IonButton>
               {timerOn ? (
-              <div className="timer-wrapper">
-                <CountdownCircleTimer
-                  isPlaying
-                  size={100}
-                  strokeWidth={3}
-                  duration={Number(timerDuration) * 60}
-                  colors={[['#A30000']]}
-                  //onComplete={() => setTimerOn(false)}
-                >
-                  {renderTime}
-                </CountdownCircleTimer>
-              </div>
+                <div className="timer-wrapper">
+                  <CountdownCircleTimer
+                    key={timerDuration}
+                    isPlaying
+                    size={100}
+                    strokeWidth={3}
+                    duration={timerDuration}
+                    colors={[['#A30000']]}
+                    onComplete={() => {
+                      switchCycle()
+                      return [true, 2000]
+                    }}
+                  >{renderTime}
+                  </CountdownCircleTimer>
+                </div>
               ) : null}
             </IonButtons>
             <IonTitle>Room</IonTitle>
@@ -140,7 +149,16 @@ const Playground = () => {
               players={activePlayers}
               minPlayers={settings.minRequiredPlayers}
               roomId={roomId}
-              switchCycle={switchCycle} />
+              switchCycle={switchCycle}
+              getCurrentCycle={getCycle}
+            />
+
+            <div className="actions">
+              <ActivePlayers
+                list={activePlayers}
+                minPlayers={settings.minRequiredPlayers}
+              />
+            </div>
           </div>
         </IonContent>
       </IonPage>

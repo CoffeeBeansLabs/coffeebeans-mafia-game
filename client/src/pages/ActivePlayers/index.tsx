@@ -5,7 +5,7 @@ import { IonList, IonItem } from '@ionic/react'
 const ActivePlayers = ({ list, minPlayers }) => {
   return (
     <IonList>
-      <span>Active players: {list.length} of {minPlayers}</span>
+      <IonItem>Active players: {list.length} of {minPlayers}</IonItem>
 
       {list.map(player => (
         <IonItem key={player.name}>{player.name}</IonItem>
@@ -14,7 +14,7 @@ const ActivePlayers = ({ list, minPlayers }) => {
   )
 }
 
-ActivePlayers.propTypes = {
+ActivePlayers.propTypes =   {
   list: PropTypes.array,
   minPlayers: PropTypes.number
 }
