@@ -19,6 +19,7 @@ import Actions from '../Actions';
 import * as settingsService from "../../services/room-settings";
 import * as playerService from "../../services/player";
 import { saveAction } from "../../services/action";
+import { getGameContext } from "../../services/game-context";
 
 import './styles.css';
 import Arena from '../Arena';
@@ -40,12 +41,14 @@ const Playground = () => {
     nightCycleDuration: 0,
     dayCycleDuration: 0
   })
-  const [activePlayers, setActivePlayers] = useState([])
 
+  const [activePlayers, setActivePlayers] = useState([])
   const [currentCycle, setCurrentCycle] = useState('');
+
   const [timerOn, setTimerOn] = useState(false);
   const [timerDuration, setTimerDuration] = useState(0);
 
+  const [gameContext, setGameContext]=useState({ gameStatus: false})
   const [username, setUsername] = useState(currentUser || '')
 
   useEffect(() => {
@@ -57,6 +60,9 @@ const Playground = () => {
 
       setSettings(settingsResponse)
       setActivePlayers(activePlayersResponse)
+
+      const gameContxt = await getGameContext(roomId)
+      setGameContext(gameContxt)
 
       const username = localStorage.getItem('username');
       if (username) {

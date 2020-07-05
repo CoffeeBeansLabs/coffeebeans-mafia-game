@@ -5,11 +5,11 @@ import Video from 'twilio-video';
 import { IonButton } from '@ionic/react';
 import * as cordinator from '../../services/cordinator'
 import VideoContainer from '../VideoContainer'
-import { getInstructionBasedOnCharacter } from '../Actions/actions'
+import { setGameContext } from "../../services/game-context";
 
 import './styles.css'
 
-const Arena = ({ players, minPlayers, roomId, switchCycle, token }) => {
+const Arena = ({ players, minPlayers, roomId, switchCycle, token, gameContext }) => {
   const [currentUser, setCurrentUser] = useState({ name: '', character: '' })
   const [captain, setCaptain] = useState({ name: '' })
   const [startGame, setStartGame] = useState(false)
@@ -43,8 +43,6 @@ const Arena = ({ players, minPlayers, roomId, switchCycle, token }) => {
       room.participants.forEach(participantConnected);
     });
 
-    console.log(room);
-
     return () => {
       setRoom(currentRoom => {
         if (currentRoom && currentRoom.localParticipant.state === 'connected') {
@@ -60,10 +58,14 @@ const Arena = ({ players, minPlayers, roomId, switchCycle, token }) => {
       });
     };
 
-  }, [players, roomId, token])
+  }, [players, roomId, token, gameContext])
 
   const startGameAction = async () => {
     await cordinator.assignRoles(players, roomId)
+
+    gameContext.gameStatus = true
+    await setGameContext(roomId, gameContext) //save on the backend
+
     setStartGame(true)
     switchCycle()
   }
@@ -97,7 +99,8 @@ Arena.propTypes = {
   minPlayers: PropTypes.number,
   roomId: PropTypes.string,
   switchCycle: PropTypes.func,
-  getCurrentCycle: PropTypes.func
+  getCurrentCycle: PropTypes.func,
+  gameContext: PropTypes.object
 }
 
 Arena.defaultProps = {
