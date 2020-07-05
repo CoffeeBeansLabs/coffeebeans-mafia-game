@@ -28,7 +28,7 @@ gameStates.buildStates((state) => {
   console.log('new state : ', state)
 })
 samay = new Samay(360000, god, gameStates)
-// god.setPlayers(players)
+god.setPlayers(players)
 
 // app.use('/', indexRouter)
 // app.use('/players', usersRouter)
@@ -48,7 +48,7 @@ app.get('/players', function (req, res) {
 
 app.post('/players', function (req, res) {
   res.setHeader('Content-Type', 'application/json')
-  const player = god.createPlayer(req.body.name,req.body.isCaptain)
+  const player = god.createPlayer(req.body.name,req.body.isCaptain,req.body.token)
   res.send(player)
 })
 

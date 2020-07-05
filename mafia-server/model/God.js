@@ -22,11 +22,11 @@ module.exports = class God {
   setStartState (startState) {
     this.currentState = startState
     const actionsProcessor = new ActionsProcessor([])
-    this.playerOutcomes = this.computePlayerOutcomes(actionsProcessor)
+    this.playerOutcomes = this.computePlayerOutcomes2(actionsProcessor)
   }
 
-  createPlayer (name,isCaptain) {
-    const player = new Player(name,isCaptain)
+  createPlayer (name,isCaptain, token) {
+    const player = new Player(name,isCaptain, token)
     this.players.push(player)
     return player
   }
@@ -75,7 +75,7 @@ module.exports = class God {
       const updatedActionEvents = this.validateAndFixActions(actionEvents)
 
       actionsProcessor.groupVotesByPlayerAction()
-      this.playerOutcomes = this.computePlayerOutcomes(actionsProcessor)
+      this.playerOutcomes = this.computePlayerOutcomes2(actionsProcessor)
       this.gameOutcome = this.computeGameOutcome()
 
       this.gameState = this.createSerGameState()
@@ -97,7 +97,7 @@ module.exports = class God {
     }
   }
 
-  computePlayerOutcomes (actionsProcessor) {
+  computePlayerOutcomes2 (actionsProcessor) {
     return this.players.filter(player => !player.isInactive).map(player => {
       const outcome = {}
       outcome.votes = actionsProcessor.getVotesForPlayer(player.id)
@@ -107,6 +107,8 @@ module.exports = class God {
       outcome.verifiedPlayer = actionsProcessor.getPlayerWithMaxActionVotes(this.POLICE)
       outcome.banishedPlayer = actionsProcessor.getPlayerWithMaxActionVotes(this.BANISH)
       outcome.suspectedPlayer = actionsProcessor.getPlayerWithMaxActionVotes(this.SUSPECT)
+      outcome.isInactive = !actionsProcessor.isPlayerActive(outcome)
+      player.isInactive = !actionsProcessor.isPlayerActive(outcome)
       return outcome
     })
   }

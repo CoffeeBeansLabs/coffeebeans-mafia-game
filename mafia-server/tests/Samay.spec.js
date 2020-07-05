@@ -68,6 +68,7 @@ function printGameProgress (outcome) {
 
   const activePlayers = outcome.playerOutcomes.filter(playerOutcome => !playerOutcome.isInactive)
   const playerOutcome = activePlayers[0]
+  const inActivePlayers = outcome.playerOutcomes.filter(playerOutcome => playerOutcome.isInactive).map(pl => pl.player.id)
 
   const result = {
     killed: playerOutcome.killedPlayer,
@@ -76,6 +77,7 @@ function printGameProgress (outcome) {
     banishedPlayer: playerOutcome.banishedPlayer,
     suspectedPlayer: playerOutcome.suspectedPlayer,
     activePlayersCount: activePlayers.length,
+    inActivePlayers: inActivePlayers,
     gameOutcome : gameOutcome
   }
 
