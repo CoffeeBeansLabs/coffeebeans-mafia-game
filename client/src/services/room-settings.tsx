@@ -1,10 +1,11 @@
-export const saveRoomSettings = async (settings, roomId) => {
+export const saveRoomSettings = async (settings, roomId, token) => {
   // save on the backend
   settings.minRequiredPlayers = getRequiredPlayers(settings);
   settings.roomId = roomId
   const players = [{
     name: settings.captain,
-    role: 'captain'
+    role: 'captain',
+    token: token
   }]
 
   localStorage.setItem('activePlayers', JSON.stringify(players))
