@@ -24,6 +24,7 @@ const Arena = ({ players, minPlayers, roomId, switchCycle, token, gameContext })
       p.name === localStorage.getItem("username"))
 
     setCurrentUser(currentUser)
+    setStartGame(gameContext.gameStatus === "true")
 
     const participantConnected = participant => {
       setParticipants(prevParticipants => [...prevParticipants, participant]);
@@ -63,7 +64,7 @@ const Arena = ({ players, minPlayers, roomId, switchCycle, token, gameContext })
   const startGameAction = async () => {
     await cordinator.assignRoles(players, roomId)
 
-    gameContext.gameStatus = true
+    gameContext.gameStatus = "true"
     await setGameContext(roomId, gameContext) //save on the backend
 
     setStartGame(true)
@@ -72,11 +73,14 @@ const Arena = ({ players, minPlayers, roomId, switchCycle, token, gameContext })
 
   return (
     <div className="arena">
+      {console.log('game status: ', startGame)}
       {startGame ? (
         <>
-          <span className="instruction">Hi {currentUser.name}! Your role is {currentUser.character.toUpperCase()}</span>
+          <span className="instruction">Hi {currentUser && currentUser.name}! 
+          Your role is {currentUser && currentUser.character && currentUser.character.toUpperCase()}</span>
 
-          {room != null ? <VideoContainer localParticipant={room.localParticipant} /> : ''}
+        {console.log(room)}
+          {room != null ? <VideoContainer localParticipant={room.localParticipant} participants={participants}/> : ''}
         </>
       ) :
         <span className="hint">
