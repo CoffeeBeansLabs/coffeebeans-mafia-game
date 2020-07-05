@@ -1,5 +1,8 @@
 const Player = require('./Player')
 const ActionsProcessor = require('./ActionsProcessor')
+const Chance  = require('chance')
+const chance = new Chance()
+const _ = require('lodash')
 
 module.exports = class God {
 
@@ -32,13 +35,32 @@ module.exports = class God {
     this.players = players
   }
 
-  getActivePlayers() {
-    return this.playerOutcomes.filter(outcome => !outcome.isInactive)
-      .map(outcome => outcome.player)
+  getPlayers () {
+    return this.players
   }
 
-  assignRoles (distribution) {
-    //TODO: logic to randomly assign roles
+  getActivePlayers () {
+    return this.playerOutcomes.filter(outcome => !outcome.isInactive).map(outcome => outcome.player)
+  }
+
+  getPlayerOutcome (playerId) {
+    const playerOutcome = this.playerOutcomes.find(player => player.id === playerId)
+    playerOutcome.gameState = this.gameState
+    return playerOutcome
+  }
+
+  assignRoles (roleDistribution) {
+    const shuffledPlayers = chance.shuffle(this.players)
+    let playerIndex = 0
+    _.keys(roleDistribution).forEach(character => {
+      while (roleDistribution[character]) {
+        shuffledPlayers[playerIndex].character = character
+
+        playerIndex++
+        roleDistribution[character]--
+      }
+    })
+    this.players = shuffledPlayers;
   }
 
   getRole (playerId) {
@@ -55,17 +77,22 @@ module.exports = class God {
       this.playerOutcomes = this.computePlayerOutcomes(actionsProcessor)
       this.gameOutcome = this.computeGameOutcome()
 
-      const outcome =  {
+      this.gameState = this.createSerGameState()
+      const outcome = {
         playerOutcomes: this.playerOutcomes,
-        gameState: {
-          phase : this.currentState.phase,
-          activity: this.currentState.activity,
-          turn: this.currentState.turn,
-          event: this.gameOutcome
-        }
+        gameState: this.gameState,
       }
       this.updateStep()
-      return outcome;
+      return outcome
+    }
+  }
+
+  createSerGameState () {
+    return {
+      phase: this.currentState.phase,
+      activity: this.currentState.activity,
+      turn: this.currentState.turn,
+      event: this.gameOutcome,
     }
   }
 

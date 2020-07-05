@@ -11,11 +11,6 @@ const actions =[
     },
     against: { // player
       id: "p7"
-    },
-    gameState: {
-      turn: 2,
-      step: {
-      }
     }
   },
   {
@@ -195,3 +190,64 @@ const players = actions.map(action => action.from)
 
 exports.actions = actions
 exports.players = players
+
+
+const Chance = require('chance')
+
+const chance = new Chance()
+
+let pickOtherPlayer = function (playerIds, fromPlayer) {
+  let chosenPlayer = chance.pickone(playerIds)
+  if (fromPlayer.from.id === chosenPlayer) {
+    chosenPlayer = chance.pickone(playerIds)
+  }
+  return chosenPlayer
+}
+
+function pickPlayerExcludingRole (playerIds, fromPlayer, actions, role) {
+  let chosenPlayerId = pickOtherPlayer(playerIds, fromPlayer)
+  let chosenPlayer = actions.find(action => action.from.id === chosenPlayerId)
+
+  while (chosenPlayer.from.role === role) {
+    chosenPlayerId = pickOtherPlayer(playerIds, fromPlayer)
+    chosenPlayer = actions.find(action => action.from.id === chosenPlayerId)
+  }
+  return chosenPlayerId
+}
+
+function pickAny (playerIds) {
+  return chance.pickone(playerIds)
+}
+
+function generateRandomActions (players, phase,activity) {
+  const playerIds = players.
+    map(player => player.id)
+
+  const generatedActions = playerIds.map(playerId => {
+    const fromPlayer = actions.find(action => action.from.id === playerId)
+    if (phase === 'day') {
+      fromPlayer.action.name = activity === "vote1" ? 'suspect': 'banish'
+      fromPlayer.against.id = pickOtherPlayer(playerIds, fromPlayer)
+    } else if (phase === 'night') {
+      switch (fromPlayer.from.role) {
+        case 'mafia':
+          fromPlayer.action.name = 'mafiaKill'
+          fromPlayer.against.id = pickPlayerExcludingRole(playerIds, fromPlayer, actions, 'mafia')
+          break
+        case 'doctor':
+          fromPlayer.action.name = 'doctorSave'
+          fromPlayer.against.id = pickAny(playerIds)
+          break
+        case 'police':
+          fromPlayer.action.name = 'policeInvestigate'
+          fromPlayer.against.id = pickPlayerExcludingRole(playerIds, fromPlayer, actions, 'police')
+          break
+        default:
+          fromPlayer.action.name = 'null'
+          break
+      }
+    }
+    return fromPlayer
+  })
+  return generatedActions
+}

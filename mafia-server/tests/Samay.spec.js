@@ -100,7 +100,6 @@ describe('Samay', () => {
         let activity = god.currentState.activity
 
         let actions = generateRandomActions(activePlayers, phase,activity)
-        actions.forEach(action => samay.recordAction())
 
         samay.startTime()
         actions.forEach(action => samay.recordAction(action.from.id, action))
