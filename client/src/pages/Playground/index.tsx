@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { useParams } from 'react-router-dom'
 import {
   IonContent,
@@ -12,7 +12,7 @@ import {
   IonButton,
   IonButtons,
 } from '@ionic/react';
-import { CountdownCircleTimer } from "react-countdown-circle-timer";
+// import { CountdownCircleTimer } from "react-countdown-circle-timer";
 
 import ActivePlayers from '../ActivePlayers';
 import Actions from '../Actions';
@@ -31,7 +31,15 @@ const GAME_CYCLES = {
 const Playground = () => {
   const { id: roomId } = useParams()
 
-  const [currentUser, setCurrentUser] = useState(localStorage.getItem('username'))
+  const [currentUser, setCurrentUser] = useState(localStorage.getItem('username'));
+  
+  const [token, setToken] = useState(() => {
+    const username = localStorage.getItem('username');
+    const players = JSON.parse(localStorage.getItem('activePlayers') ?? 'null');
+    return players != null ? players.find(p => p.name == username).token : null;
+  }
+  );
+
   const [settings, setSettings] = useState({
     minRequiredPlayers: 0,
     nightCycleDuration: 0,
@@ -60,9 +68,24 @@ const Playground = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const registerPlayer = async () => {
-    const activePlayersList = await playerService.registerPlayer(username, roomId);
+  const getToken = async () => {
+    const data = await fetch('http://localhost:3001/video/token', {
+      method: 'POST',
+      body: JSON.stringify({
+        identity: username,
+        room: roomId
+      }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(res => res.json());
+    setToken(data.token);
+    return data.token;
+  }
 
+  const registerPlayer = async () => {
+    const token = await getToken();
+    const activePlayersList = await playerService.registerPlayer(username, roomId, token);
     setActivePlayers(activePlayersList)
     setCurrentUser(username)
   }
@@ -114,7 +137,7 @@ const Playground = () => {
               </IonButton>
               {timerOn ? (
                 <div className="timer-wrapper">
-                  <CountdownCircleTimer
+                  {/* <CountdownCircleTimer
                     key={timerDuration}
                     isPlaying
                     size={100}
@@ -126,7 +149,7 @@ const Playground = () => {
                       return [true, 3000]
                     }}
                   >{renderTime}
-                  </CountdownCircleTimer>
+                  </CountdownCircleTimer> */}
                 </div>
               ) : null}
             </IonButtons> 
@@ -142,12 +165,14 @@ const Playground = () => {
               />
             </div>
 
-            <Arena
+            {token != null ? <Arena
               players={activePlayers}
               minPlayers={settings.minRequiredPlayers}
               roomId={roomId}
               switchCycle={switchCycle}
-            />
+              token={token}
+            /> : ''}
+           
 
             {timerOn ?
               <Actions

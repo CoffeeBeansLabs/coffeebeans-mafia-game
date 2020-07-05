@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
+import Video from 'twilio-video';
 import { IonButton } from '@ionic/react';
 import * as cordinator from '../../services/cordinator'
 import VideoContainer from '../VideoContainer'
@@ -7,10 +8,12 @@ import { getInstructionBasedOnCharacter } from '../Actions/actions'
 
 import './styles.css'
 
-const Arena = ({ players, minPlayers, roomId, switchCycle }) => {
+const Arena = ({ players, minPlayers, roomId, switchCycle, token }) => {
   const [currentUser, setCurrentUser] = useState({ name: '', character: '' })
   const [captain, setCaptain] = useState({ name: '' })
   const [startGame, setStartGame] = useState(false)
+  const [room, setRoom] = useState(null);
+  const [participants, setParticipants] = useState([]);
 
   useEffect(() => {
     const captain = players.find(p => p.role === "captain")
@@ -21,7 +24,42 @@ const Arena = ({ players, minPlayers, roomId, switchCycle }) => {
 
     setCurrentUser(currentUser)
 
-  }, [players])
+    const participantConnected = participant => {
+      setParticipants(prevParticipants => [...prevParticipants, participant]);
+    };
+
+    const participantDisconnected = participant => {
+      setParticipants(prevParticipants =>
+        prevParticipants.filter(p => p !== participant)
+      );
+    };
+    Video.connect(token, {
+      name: roomId
+    }).then(room => {
+      setRoom(room);
+      room.on('participantConnected', participantConnected);
+      room.on('participantDisconnected', participantDisconnected);
+      room.participants.forEach(participantConnected);
+    });
+
+    console.log(room);
+
+    return () => {
+      setRoom(currentRoom => {
+        if (currentRoom && currentRoom.localParticipant.state === 'connected') {
+          currentRoom.localParticipant.tracks.forEach(function (trackPublication) {
+            trackPublication.track.stop();
+          });
+          console.log(room);
+          currentRoom.disconnect();
+          return null;
+        } else {
+          return currentRoom;
+        }
+      });
+    };
+
+  }, [players, roomId, token])
 
   const startGameAction = async () => {
     await cordinator.assignRoles(players, roomId)
@@ -34,19 +72,23 @@ const Arena = ({ players, minPlayers, roomId, switchCycle }) => {
       {startGame ? (
         <>
           <span className="instruction">Hi {currentUser.name}! Your role is {currentUser.character.toUpperCase()}</span>
-          <VideoContainer />
+
+          {room != null ? <VideoContainer localParticipant={room.localParticipant} /> : ''}
         </>
       ) :
-        <span className="hint">
-          {players.length === minPlayers
-            ? (currentUser && currentUser.name) === (captain && captain.name)
-              ? (<IonButton type="submit" color="danger" onClick={startGameAction}>
-                Let's begin!
-              </IonButton>)
-              : ("Waiting for captain to start the game..")
-            : "Waiting for players to join..."
-          }
-        </span>}
+        // <span className="hint">
+        //   {players.length === minPlayers
+        //     ? (currentUser && currentUser.name) === (captain && captain.name)
+        //       ? (<IonButton type="submit" color="danger" onClick={startGameAction}>
+        //         Let's begin!
+        //       </IonButton>)
+        //       : ("Waiting for captain to start the game..")
+        //     : "Waiting for players to join..."
+        //   }
+        // </span>}
+        <IonButton type="submit" color="danger" onClick={startGameAction}>
+          Let's begin!
+               </IonButton>}
     </div>
   )
 }

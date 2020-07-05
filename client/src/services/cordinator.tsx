@@ -1,4 +1,5 @@
 export const assignRoles = (players, roomId) => {
+  debugger
   const settings = JSON.parse(localStorage.getItem('settings') || '')
   players = shufflePlayers(players)
 

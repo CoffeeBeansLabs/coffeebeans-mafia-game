@@ -1,13 +1,16 @@
 const config = require('./config');
 const express = require('express');
 const bodyParser = require('body-parser');
+var cors = require('cors');
 const pino = require('express-pino-logger')();
 const { videoToken } = require('./tokens');
 
 const app = express();
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(pino);
+
 
 const sendTokenResponse = (token, res) => {
   res.set('Content-Type', 'application/json');

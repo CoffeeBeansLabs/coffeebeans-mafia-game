@@ -3,11 +3,13 @@ export const getActivePlayers = async (roomId) => {
   return JSON.parse(localStorage.getItem('activePlayers') || '')
 }
 
-export const registerPlayer = async (username, roomId) => {
+export const registerPlayer = async (username, roomId, token) => {
   // getActivePlayers
   const activePlayers = await getActivePlayers(roomId);
   activePlayers.push({
-    name: username
+    name: username,
+    roomId: roomId ?? 'test',
+    token: token
   })
 
   // save on the backend as well
