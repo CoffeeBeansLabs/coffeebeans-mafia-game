@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import {
@@ -58,6 +59,7 @@ const Playground = () => {
         playerService.getActivePlayers(roomId)
       ])
 
+      console.log('activePlayersResponse', activePlayersResponse)
       setSettings(settingsResponse)
       setActivePlayers(activePlayersResponse)
 
@@ -168,17 +170,18 @@ const Playground = () => {
             <div className="stats">
               <ActivePlayers
                 list={activePlayers}
-                minPlayers={settings.minRequiredPlayers}
+                minPlayers={2}
               />
             </div>
 
             {token != null ? <Arena
               players={activePlayers}
-              minPlayers={settings.minRequiredPlayers}
+              minPlayers={2}
               roomId={roomId}
               switchCycle={switchCycle}
               token={token}
               gameContext={gameContext}
+              currentCycle={currentCycle}
             /> : ''}
            
 

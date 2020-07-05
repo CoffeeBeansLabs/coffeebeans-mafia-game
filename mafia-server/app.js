@@ -3,6 +3,7 @@ const path = require('path')
 const cookieParser = require('cookie-parser')
 const logger = require('morgan')
 const {actions, players} = require('./tests/actions')
+const cors = require('cors')
 
 const indexRouter = require('./routes')
 // const usersRouter = require('./routes/users')
@@ -13,8 +14,10 @@ const GameStates = require('./model/GameStates')
 
 app = express()
 
+app
 app.use(logger('dev'))
 app.use(express.json())
+app.use(cors())
 app.use(express.urlencoded({extended: false}))
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
@@ -25,7 +28,7 @@ gameStates.buildStates((state) => {
   console.log('new state : ', state)
 })
 samay = new Samay(360000, god, gameStates)
-god.setPlayers(players)
+// god.setPlayers(players)
 
 // app.use('/', indexRouter)
 // app.use('/players', usersRouter)
