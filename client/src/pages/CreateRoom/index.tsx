@@ -46,6 +46,23 @@ const CreateRoom = ({history}) => {
   const [ toasterMessage, setToasterMessage ] = useState("");
   const [ showErrorToast, setErrorToast ] = useState(false);
 
+  const [token, setToken] = useState(null);
+
+  const getToken = async (settings, roomId) => {
+    const data = await fetch('http://localhost:3001/video/token', {
+      method: 'POST',
+      body: JSON.stringify({
+        identity: settings.captain,
+        room: roomId
+      }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(res => res.json());
+    setToken(data.token);
+    return data.token;
+  }
+
   const onSubmit = async (data: any) => {
     if (Object.keys(errors).length) {
       const x = Object.keys(errors)
@@ -56,12 +73,15 @@ const CreateRoom = ({history}) => {
       
       return
     }
+
     const timestamp = new Date().getTime();
 
     const roomId = `${data.roomName.toLowerCase()
-      .replace (/\s/g, '-')}-${timestamp}`
+      .replace(/\s/g, '-')}-${timestamp}`
 
-    await settingsService.saveRoomSettings(data, roomId)
+    const token = await getToken(data, roomId);
+
+    await settingsService.saveRoomSettings(data, roomId, token)
 
     history.push(`/room/${roomId}`);
   };

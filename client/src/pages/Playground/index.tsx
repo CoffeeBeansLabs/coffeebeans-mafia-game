@@ -19,6 +19,7 @@ import Actions from '../Actions';
 import * as settingsService from "../../services/room-settings";
 import * as playerService from "../../services/player";
 import { saveAction } from "../../services/action";
+import { getGameContext } from "../../services/game-context";
 
 import './styles.css';
 import Arena from '../Arena';
@@ -31,18 +32,23 @@ const GAME_CYCLES = {
 const Playground = () => {
   const { id: roomId } = useParams()
 
-  const [currentUser, setCurrentUser] = useState(localStorage.getItem('username'))
+  const [currentUser, setCurrentUser] = useState(localStorage.getItem('username'));
+  
+  const [token, setToken] = useState('');
+
   const [settings, setSettings] = useState({
     minRequiredPlayers: 0,
     nightCycleDuration: 0,
     dayCycleDuration: 0
   })
-  const [activePlayers, setActivePlayers] = useState([])
 
+  const [activePlayers, setActivePlayers] = useState([])
   const [currentCycle, setCurrentCycle] = useState('');
+
   const [timerOn, setTimerOn] = useState(false);
   const [timerDuration, setTimerDuration] = useState(0);
 
+  const [gameContext, setGameContext]=useState({ gameStatus: false})
   const [username, setUsername] = useState(currentUser || '')
 
   useEffect(() => {
@@ -54,15 +60,39 @@ const Playground = () => {
 
       setSettings(settingsResponse)
       setActivePlayers(activePlayersResponse)
+
+      const gameContxt = await getGameContext(roomId)
+      setGameContext(gameContxt)
+
+      const username = localStorage.getItem('username');
+      if (username) {
+        const token = activePlayersResponse.find(p => p.name === username).token
+        setToken(token)
+      };
     }
 
     getSettings()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const registerPlayer = async () => {
-    const activePlayersList = await playerService.registerPlayer(username, roomId);
+  const getToken = async () => {
+    const data = await fetch('http://localhost:3001/video/token', {
+      method: 'POST',
+      body: JSON.stringify({
+        identity: username,
+        room: roomId
+      }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(res => res.json());
+    setToken(data.token);
+    return data.token;
+  }
 
+  const registerPlayer = async () => {
+    const token = await getToken();
+    const activePlayersList = await playerService.registerPlayer(username, roomId, token);
     setActivePlayers(activePlayersList)
     setCurrentUser(username)
   }
@@ -142,12 +172,15 @@ const Playground = () => {
               />
             </div>
 
-            <Arena
+            {token != null ? <Arena
               players={activePlayers}
               minPlayers={settings.minRequiredPlayers}
               roomId={roomId}
               switchCycle={switchCycle}
-            />
+              token={token}
+              gameContext={gameContext}
+            /> : ''}
+           
 
             {timerOn ?
               <Actions
