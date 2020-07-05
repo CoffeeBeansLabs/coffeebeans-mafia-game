@@ -55,7 +55,7 @@ module.exports = class God {
     let playerIndex = 0
     _.keys(roleDistribution).forEach(character => {
       while (roleDistribution[character]) {
-        shuffledPlayers[playerIndex].character = character
+        shuffledPlayers[playerIndex].role = character
 
         playerIndex++
         roleDistribution[character]--
