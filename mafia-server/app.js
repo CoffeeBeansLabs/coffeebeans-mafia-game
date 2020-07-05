@@ -2,8 +2,8 @@ const express = require('express')
 const path = require('path')
 const cookieParser = require('cookie-parser')
 const logger = require('morgan')
-const {actions, players} = require('./tests/actions')
 const cors = require('cors')
+const {actions, players,generateRandomActions} = require('./tests/actions')
 
 const indexRouter = require('./routes')
 // const usersRouter = require('./routes/users')
@@ -48,7 +48,7 @@ app.get('/players', function (req, res) {
 
 app.post('/players', function (req, res) {
   res.setHeader('Content-Type', 'application/json')
-  const player = god.createPlayer(req.body.name)
+  const player = god.createPlayer(req.body.name,req.body.isCaptain)
   res.send(player)
 })
 
@@ -66,19 +66,17 @@ app.post('/actions', function (req, res) {
 app.get('/game-state', function (req, res) {
   res.setHeader('Content-Type', 'application/json')
   const playerId = req.query.player
-
+  console.log("player id : ",playerId)
 
   let activePlayers = god.getActivePlayers()
   let phase = god.currentState.phase
   let activity = god.currentState.activity
-
+  //
   let actions = generateRandomActions(activePlayers, phase,activity)
-
+  //
   samay.startTime()
   actions.forEach(action => samay.recordAction(action.from.id, action))
   samay.recordAllDone()
-
-
 
 
   res.send(god.getPlayerOutcome(playerId))

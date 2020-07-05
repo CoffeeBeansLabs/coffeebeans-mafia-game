@@ -1,6 +1,6 @@
 const GameStates = require('./GameStates')
 const _ = require('lodash')
-
+// const { timer } = require()
 module.exports = class Samay {
 
   constructor (stepTime, god,gameStates) {

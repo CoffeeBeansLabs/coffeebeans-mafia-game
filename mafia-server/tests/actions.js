@@ -251,3 +251,5 @@ function generateRandomActions (players, phase,activity) {
   })
   return generatedActions
 }
+
+exports.generateRandomActions = generateRandomActions

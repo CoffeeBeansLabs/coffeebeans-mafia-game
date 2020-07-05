@@ -25,8 +25,8 @@ module.exports = class God {
     this.playerOutcomes = this.computePlayerOutcomes(actionsProcessor)
   }
 
-  createPlayer (name) {
-    const player = new Player(name)
+  createPlayer (name,isCaptain) {
+    const player = new Player(name,isCaptain)
     this.players.push(player)
     return player
   }
@@ -44,7 +44,8 @@ module.exports = class God {
   }
 
   getPlayerOutcome (playerId) {
-    const playerOutcome = this.playerOutcomes.find(player => player.id === playerId)
+
+    const playerOutcome = this.playerOutcomes.find(player => player.player.id === playerId)
     playerOutcome.gameState = this.gameState
     return playerOutcome
   }
@@ -106,8 +107,6 @@ module.exports = class God {
       outcome.verifiedPlayer = actionsProcessor.getPlayerWithMaxActionVotes(this.POLICE)
       outcome.banishedPlayer = actionsProcessor.getPlayerWithMaxActionVotes(this.BANISH)
       outcome.suspectedPlayer = actionsProcessor.getPlayerWithMaxActionVotes(this.SUSPECT)
-      outcome.isInactive = !actionsProcessor.isPlayerActive(outcome)
-      player.isInactive = !actionsProcessor.isPlayerActive(outcome)
       return outcome
     })
   }
