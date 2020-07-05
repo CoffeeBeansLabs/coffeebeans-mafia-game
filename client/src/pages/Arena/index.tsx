@@ -9,7 +9,7 @@ import { setGameContext } from "../../services/game-context";
 
 import './styles.css'
 
-const Arena = ({ players, minPlayers, roomId, switchCycle, token, gameContext }) => {
+const Arena = ({ players, minPlayers, roomId, switchCycle, token, gameContext, currentCycle }) => {
   const [currentUser, setCurrentUser] = useState({ name: '', character: '' })
   const [captain, setCaptain] = useState({ name: '' })
   const [startGame, setStartGame] = useState(false)
@@ -65,7 +65,8 @@ const Arena = ({ players, minPlayers, roomId, switchCycle, token, gameContext })
     await cordinator.assignRoles(players, roomId)
 
     gameContext.gameStatus = "true"
-    await setGameContext(roomId, gameContext) //save on the backend
+    settings = JSON.parse(localStorage.getItem('settings') || '{}')
+    await setGameContext(roomId, gameContext, settings) //save on the backend
 
     setStartGame(true)
     switchCycle()
@@ -80,7 +81,12 @@ const Arena = ({ players, minPlayers, roomId, switchCycle, token, gameContext })
           Your role is {currentUser && currentUser.character && currentUser.character.toUpperCase()}</span>
 
         {console.log(room)}
-          {room != null ? <VideoContainer localParticipant={room.localParticipant} participants={participants}/> : ''}
+          {room != null ? <VideoContainer 
+            localParticipant={room.localParticipant}
+            participants={participants} 
+            currentCycle={currentCycle}
+            players={players}
+            /> : ''}
         </>
       ) :
         <span className="hint">

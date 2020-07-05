@@ -1,16 +1,34 @@
+// @ts-nocheck
+import axios from 'axios';
+const API_BASE_URL = "http://localhost:3000"
+
 export const getActivePlayers = async (roomId) => {
   // Get from the backend
-  return JSON.parse(localStorage.getItem('activePlayers') || '')
+  const result = await axios({
+    method: 'GET',
+    url: `${API_BASE_URL}/players`,
+  })
+
+  return result.data
 }
 
-export const registerPlayer = async (username, roomId, token) => {
+export const registerPlayer = async (username, roomId, token, isCaptain) => {
+  const result = await axios({
+      method: 'POST',
+      url: `${API_BASE_URL}/players`,
+      data: { name: username, isCaptain: true }
+    })
   // getActivePlayers
-  const activePlayers = await getActivePlayers(roomId);
-  activePlayers.push({
-    name: username,
-    roomId: roomId ?? 'test',
-    token: token
-  })
+  const res = await getActivePlayers(roomId);
+
+  debugger;
+  const activePlayers = res
+
+  // activePlayers.push({
+  //   name: username,
+  //   roomId: roomId ?? 'test',
+  //   token: token
+  // })
 
   // save on the backend as well
   localStorage.setItem('activePlayers', JSON.stringify(activePlayers));

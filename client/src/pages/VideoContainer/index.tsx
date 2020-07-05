@@ -1,9 +1,18 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import './styles.css';
 
 import Participant from "../../components/Participant";
 
-const VideoContainer = ({localParticipant, participants}) => {
+const VideoContainer = ({localParticipant, participants, currentCycle, players}) => {
+
+  const [videoParticipants, setVideoParticipants] = useState([])
+
+  // useEffect(() => {
+  //   const videoParticipants = participants.map(videoParticipant => {
+  //     const p = players.find(p => p.name === videoParticipants.identity)
+  //     if p.character === ''
+  //   })
+  // }, [])
 
   return (
     <div className="highlight video-container">
