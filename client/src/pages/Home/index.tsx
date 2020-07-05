@@ -7,12 +7,12 @@ const Home: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>CB MAFIA</IonTitle>
+          <IonTitle>The Legendary MAFIA</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent>
         <div className="container">
-          <strong>Coffebeans Consulting presents MAFIA!</strong>
+          <strong>Coffebeans Consulting presents The Legendary MAFIA!</strong>
           <p>
             <IonButton fill="solid" color="secondary" routerLink="/create-room" routerDirection="root">Create a Room</IonButton>
           </p>

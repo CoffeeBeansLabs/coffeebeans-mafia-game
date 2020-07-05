@@ -20,7 +20,7 @@ export const getInstructionBasedOnCharacter = (character, gameCycle) => {
 
       if (character === 'doctor') {
         return {
-          instdisplayruction: <span>Please vote a villager to save.</span>,
+          display: <span>Please vote a villager to save.</span>,
           enableVote: true
         }
       }
@@ -62,4 +62,13 @@ export const getInstructionBasedOnCharacter = (character, gameCycle) => {
       }
       break;
   }
+}
+
+
+export const filterVotingList = (currentPlayer, list) => {
+  if (currentPlayer.character === 'mafia') {
+    list = list.filter(player =>  player !== 'mafia')
+  }
+
+  return list.filter(player => currentPlayer.name !== player.name)
 }

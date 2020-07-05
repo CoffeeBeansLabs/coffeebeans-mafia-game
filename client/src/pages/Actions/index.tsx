@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { IonAvatar, IonLabel, IonChip, IonButton } from '@ionic/react';
-import { getInstructionBasedOnCharacter } from './actions'
+import { getInstructionBasedOnCharacter, filterVotingList } from './actions'
 import './styles.css';
 
 const Actions = ({ players, saveAction, currentCycle }) => {
   const [votedPlayer, setVotedPlayer] = useState({ name: '' });
   const [currentUser, setCurrentUser] = useState({ name: '', character: '' })
+  const [votingList, setVotingList] = useState([]);
   const [instruction, setInstruction] = useState({ display: '', enableVote: false })
 
   useEffect(() => {
@@ -18,6 +19,9 @@ const Actions = ({ players, saveAction, currentCycle }) => {
     const i: any = getInstructionBasedOnCharacter(currentUser.character, currentCycle)
     setInstruction(i)
 
+    const list = filterVotingList(currentUser, players)
+    setVotingList(list)
+
   }, [players, currentCycle])
 
   return (
@@ -26,7 +30,7 @@ const Actions = ({ players, saveAction, currentCycle }) => {
       {
         instruction.enableVote ?
           <>
-            {players.map((player: any) => (
+            {votingList.map((player: any) => (
               <IonChip key={player.name} onClick={() => { setVotedPlayer(player) }}>
 
                 <IonAvatar>

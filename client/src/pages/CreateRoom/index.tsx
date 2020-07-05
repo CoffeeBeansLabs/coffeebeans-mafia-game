@@ -37,14 +37,14 @@ let initialValues = {
   captain: "ABC"
 };
 
-const CreateRoom = ({history}) => {
+const CreateRoom = ({ history }) => {
   const { control, handleSubmit, setError, getValues, errors, setValue } = useForm({
     defaultValues: { ...initialValues },
     mode: "onChange"
   });
 
-  const [ toasterMessage, setToasterMessage ] = useState("");
-  const [ showErrorToast, setErrorToast ] = useState(false);
+  const [toasterMessage, setToasterMessage] = useState("");
+  const [showErrorToast, setErrorToast] = useState(false);
 
   const [token, setToken] = useState(null);
 
@@ -70,7 +70,7 @@ const CreateRoom = ({history}) => {
 
       setToasterMessage(x)
       setErrorToast(true)
-      
+
       return
     }
 
@@ -108,25 +108,25 @@ const CreateRoom = ({history}) => {
           <IonCardContent>
             <form onSubmit={handleSubmit(onSubmit)} style={{ padding: 18 }}>
 
-            <IonItem>
-                <IonLabel slot="start">Your name captain:</IonLabel>
-                <Controller
-                  as={IonInput}
-                  control={control}
-                  class="input"
-                  onIonChange={(e: any) => setValue("roomName", e.detail.value)}
-                  name="roomName"
-                />
-              </IonItem>
-
               <IonItem>
-                <IonLabel slot="start">Your room name:</IonLabel>
+                <IonLabel slot="start">Your name captain:</IonLabel>
                 <Controller
                   as={IonInput}
                   control={control}
                   class="input"
                   onIonChange={(e: any) => setValue("captain", e.detail.value)}
                   name="captain"
+                />
+              </IonItem>
+
+              <IonItem>
+                <IonLabel slot="start">Your room:</IonLabel>
+                <Controller
+                  as={IonInput}
+                  control={control}
+                  class="input"
+                  onIonChange={(e: any) => setValue("roomName", e.detail.value)}
+                  name="roomName"
                 />
               </IonItem>
 
@@ -223,7 +223,7 @@ const CreateRoom = ({history}) => {
                   onIonChange={e => setValue("dayCycleDuration", e.detail.value)}
                 />
               </IonItem>
-              
+
               <IonButton type="submit" color="danger">
                 Let's play!
               </IonButton>

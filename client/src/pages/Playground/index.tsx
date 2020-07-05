@@ -121,7 +121,7 @@ const Playground = () => {
         <div className="room--register">
           <IonInput
             value={username}
-            placeholder="Enter your name to proceed"
+            placeholder="Enter your name to play"
             onIonChange={e => setUsername(e.detail.value!)}
           />
           <IonFab>
@@ -160,7 +160,7 @@ const Playground = () => {
                 </div>
               ) : null}
             </IonButtons> 
-            <IonTitle>Room</IonTitle>
+            <IonTitle>The Legendary MAFIA</IonTitle>
           </IonToolbar>
         </IonHeader>
         <IonContent>
