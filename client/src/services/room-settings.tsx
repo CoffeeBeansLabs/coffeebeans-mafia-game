@@ -8,6 +8,7 @@ export const saveRoomSettings = async (settings, roomId, token) => {
     token: token
   }]
 
+  localStorage.setItem('gameContext', JSON.stringify({ gameStatus: "false" }))
   localStorage.setItem('activePlayers', JSON.stringify(players))
   localStorage.setItem('settings', JSON.stringify(settings));
   localStorage.setItem('username', settings.captain);

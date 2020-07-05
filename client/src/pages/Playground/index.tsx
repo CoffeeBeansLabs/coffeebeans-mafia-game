@@ -12,7 +12,7 @@ import {
   IonButton,
   IonButtons,
 } from '@ionic/react';
-// import { CountdownCircleTimer } from "react-countdown-circle-timer";
+import { CountdownCircleTimer } from "react-countdown-circle-timer";
 
 import ActivePlayers from '../ActivePlayers';
 import Actions from '../Actions';
@@ -144,7 +144,7 @@ const Playground = () => {
               </IonButton>
               {timerOn ? (
                 <div className="timer-wrapper">
-                  {/* <CountdownCircleTimer
+                  <CountdownCircleTimer
                     key={timerDuration}
                     isPlaying
                     size={100}
@@ -156,7 +156,7 @@ const Playground = () => {
                       return [true, 3000]
                     }}
                   >{renderTime}
-                  </CountdownCircleTimer> */}
+                  </CountdownCircleTimer>
                 </div>
               ) : null}
             </IonButtons> 
@@ -178,6 +178,7 @@ const Playground = () => {
               roomId={roomId}
               switchCycle={switchCycle}
               token={token}
+              gameContext={gameContext}
             /> : ''}
            
 
