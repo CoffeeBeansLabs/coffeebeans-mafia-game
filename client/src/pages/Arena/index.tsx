@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import Video from 'twilio-video';
@@ -76,19 +77,17 @@ const Arena = ({ players, minPlayers, roomId, switchCycle, token }) => {
           {room != null ? <VideoContainer localParticipant={room.localParticipant} /> : ''}
         </>
       ) :
-        // <span className="hint">
-        //   {players.length === minPlayers
-        //     ? (currentUser && currentUser.name) === (captain && captain.name)
-        //       ? (<IonButton type="submit" color="danger" onClick={startGameAction}>
-        //         Let's begin!
-        //       </IonButton>)
-        //       : ("Waiting for captain to start the game..")
-        //     : "Waiting for players to join..."
-        //   }
-        // </span>}
-        <IonButton type="submit" color="danger" onClick={startGameAction}>
-          Let's begin!
-               </IonButton>}
+        <span className="hint">
+          {players.length === minPlayers
+            ? (currentUser && currentUser.name) === (captain && captain.name)
+              ? (<IonButton type="submit" color="danger" onClick={startGameAction}>
+                Let's begin!
+              </IonButton>)
+              : ("Waiting for captain to start the game..")
+            : "Waiting for players to join..."
+          }
+        </span>
+      }
     </div>
   )
 }

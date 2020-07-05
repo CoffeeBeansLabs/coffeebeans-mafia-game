@@ -1,5 +1,4 @@
 export const saveRoomSettings = async (settings, roomId, token) => {
-  debugger;
   // save on the backend
   settings.minRequiredPlayers = getRequiredPlayers(settings);
   settings.roomId = roomId

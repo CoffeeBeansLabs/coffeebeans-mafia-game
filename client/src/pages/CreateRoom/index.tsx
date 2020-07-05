@@ -74,7 +74,6 @@ const CreateRoom = ({history}) => {
       return
     }
 
-    debugger ; 
     const timestamp = new Date().getTime();
 
     const roomId = `${data.roomName.toLowerCase()

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import {
   IonContent,
@@ -33,12 +33,7 @@ const Playground = () => {
 
   const [currentUser, setCurrentUser] = useState(localStorage.getItem('username'));
   
-  const [token, setToken] = useState(() => {
-    const username = localStorage.getItem('username');
-    const players = JSON.parse(localStorage.getItem('activePlayers') ?? 'null');
-    return players != null ? players.find(p => p.name == username).token : null;
-  }
-  );
+  const [token, setToken] = useState('');
 
   const [settings, setSettings] = useState({
     minRequiredPlayers: 0,
@@ -62,6 +57,12 @@ const Playground = () => {
 
       setSettings(settingsResponse)
       setActivePlayers(activePlayersResponse)
+
+      const username = localStorage.getItem('username');
+      if (username) {
+        const token = activePlayersResponse.find(p => p.name === username).token
+        setToken(token)
+      };
     }
 
     getSettings()

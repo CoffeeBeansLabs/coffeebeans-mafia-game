@@ -1,4 +1,4 @@
-
+// @ts-nocheck
 import React, { useState, useEffect, useRef } from "react";
 
 const Participant = ({ participant }) => {
@@ -10,7 +10,7 @@ const Participant = ({ participant }) => {
 
   const trackpubsToTracks = (trackMap) =>
     Array.from(trackMap.values())
-      .map((publication) => publication.track)
+      .map((publication:any) => publication.track)
       .filter((track) => track !== null);
 
   useEffect(() => {
