@@ -28,7 +28,7 @@ gameStates.buildStates((state) => {
   console.log('new state : ', state)
 })
 samay = new Samay(360000, god, gameStates)
-god.setPlayers(players)
+//god.setPlayers(players)
 
 // app.use('/', indexRouter)
 // app.use('/players', usersRouter)
@@ -85,6 +85,7 @@ app.get('/game-state', function (req, res) {
 // -------- game-start
 
 app.post('/game-start', function (req, res) {
+  
   res.setHeader('Content-Type', 'application/json')
   const roleDistribution = req.body.roleDistribution
   god.assignRoles(roleDistribution)

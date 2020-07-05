@@ -6,7 +6,7 @@ import './styles.css';
 
 const Actions = ({ players, saveAction, currentCycle }) => {
   const [votedPlayer, setVotedPlayer] = useState({ name: '' });
-  const [currentUser, setCurrentUser] = useState({ name: '', character: '' })
+  const [currentUser, setCurrentUser] = useState({ name: '', role: '' })
   const [votingList, setVotingList] = useState([]);
   const [instruction, setInstruction] = useState({ display: '', enableVote: false })
 
@@ -15,8 +15,8 @@ const Actions = ({ players, saveAction, currentCycle }) => {
       p.name === localStorage.getItem("username"))
 
     setCurrentUser(currentUser)
-    console.log(currentCycle)
-    const i: any = getInstructionBasedOnCharacter(currentUser.character, currentCycle)
+    debugger;
+    const i: any = getInstructionBasedOnCharacter(currentUser.role, currentCycle)
     setInstruction(i)
 
     const list = filterVotingList(currentUser, players)

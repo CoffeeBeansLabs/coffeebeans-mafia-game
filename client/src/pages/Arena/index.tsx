@@ -17,7 +17,7 @@ const Arena = ({ players, minPlayers, roomId, switchCycle, token, gameContext, c
   const [participants, setParticipants] = useState([]);
 
   useEffect(() => {
-    const captain = players.find(p => p.role === "captain")
+    const captain = players.find(p => p.isCaptain === "true" || p.isCaptain === true)
     setCaptain(captain)
 
     const currentUser = players.find(p =>
@@ -54,7 +54,7 @@ const Arena = ({ players, minPlayers, roomId, switchCycle, token, gameContext, c
           currentRoom.disconnect();
           return null;
         } else {
-          return currentRoom;
+          return currentRoom; 
         }
       });
     };
@@ -62,10 +62,10 @@ const Arena = ({ players, minPlayers, roomId, switchCycle, token, gameContext, c
   }, [players, roomId, token, gameContext])
 
   const startGameAction = async () => {
-    await cordinator.assignRoles(players, roomId)
+    //await cordinator.assignRoles(players, roomId)
 
     gameContext.gameStatus = "true"
-    settings = JSON.parse(localStorage.getItem('settings') || '{}')
+    const settings = JSON.parse(localStorage.getItem('settings') || '{}')
     await setGameContext(roomId, gameContext, settings) //save on the backend
 
     setStartGame(true)
@@ -80,7 +80,6 @@ const Arena = ({ players, minPlayers, roomId, switchCycle, token, gameContext, c
           <span className="instruction">Hi {currentUser && currentUser.name}! 
           Your role is {currentUser && currentUser.character && currentUser.character.toUpperCase()}</span>
 
-        {console.log(room)}
           {room != null ? <VideoContainer 
             localParticipant={room.localParticipant}
             participants={participants} 
@@ -89,8 +88,9 @@ const Arena = ({ players, minPlayers, roomId, switchCycle, token, gameContext, c
             /> : ''}
         </>
       ) :
+      <>
         <span className="hint">
-          {players.length === minPlayers
+          {players.length === 2
             ? (currentUser && currentUser.name) === (captain && captain.name)
               ? (<IonButton type="submit" color="danger" onClick={startGameAction}>
                 Let's begin!
@@ -99,6 +99,10 @@ const Arena = ({ players, minPlayers, roomId, switchCycle, token, gameContext, c
             : "Waiting for players to join..."
           }
         </span>
+        {/* <IonButton type="submit" color="danger" onClick={startGameAction}>
+          Let's begin!
+        </IonButton> */}
+      </>
       }
     </div>
   )

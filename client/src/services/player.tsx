@@ -9,14 +9,15 @@ export const getActivePlayers = async (roomId) => {
     url: `${API_BASE_URL}/players`,
   })
 
+  localStorage.setItem('activePlayers', JSON.stringify(result.data));
   return result.data
 }
 
-export const registerPlayer = async (username, roomId, token, isCaptain) => {
+export const registerPlayer = async (username, roomId, token, isCaptain=false) => {
   const result = await axios({
       method: 'POST',
       url: `${API_BASE_URL}/players`,
-      data: { name: username, isCaptain: true }
+      data: { name: username, isCaptain: isCaptain, token: token }
     })
   // getActivePlayers
   const res = await getActivePlayers(roomId);
