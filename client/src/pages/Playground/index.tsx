@@ -170,13 +170,13 @@ const Playground = () => {
             <div className="stats">
               <ActivePlayers
                 list={activePlayers}
-                minPlayers={2}
+                minPlayers={3}
               />
             </div>
 
             {token != null ? <Arena
               players={activePlayers}
-              minPlayers={2}
+              minPlayers={3}
               roomId={roomId}
               switchCycle={switchCycle}
               token={token}

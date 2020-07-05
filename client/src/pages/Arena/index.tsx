@@ -91,7 +91,7 @@ const Arena = ({ players, minPlayers, roomId, switchCycle, token, gameContext, c
       ) :
       <>
         <span className="hint">
-          {players.length === 2
+          {players.length === 3
             ? (currentUser && currentUser.name) === (captain && captain.name)
               ? (<IonButton type="submit" color="danger" onClick={startGameAction}>
                 Let's begin!
