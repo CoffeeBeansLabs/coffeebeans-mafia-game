@@ -23,7 +23,8 @@ import "@ionic/react/css/core.css";
 import "@ionic/react/css/normalize.css";
 import "@ionic/react/css/structure.css";
 import "@ionic/react/css/typography.css";
-import "./CreateRoom.css";
+import './styles.css';
+import * as settingsService from "../../services/room-settings";
 
 let initialValues = {
   roomName: "Room ABC",
@@ -42,22 +43,27 @@ const CreateRoom = ({history}) => {
     mode: "onChange"
   });
 
-  const [toasterMessage, setToasterMessage] = useState("");
-  const [showErrorToast, setErrorToast] = useState(false);
-  const [data, setData] = useState();
+  const [ toasterMessage, setToasterMessage ] = useState("");
+  const [ showErrorToast, setErrorToast ] = useState(false);
 
-  const onSubmit = (data: any) => {
+  const onSubmit = async (data: any) => {
     if (Object.keys(errors).length) {
-      console.log(errors)
-      const x = Object.keys(errors).map(f => errors[f].message || `${f} is required`).toString()
+      const x = Object.keys(errors)
+        .map(f => errors[f].message || `${f} is required`).toString()
+
       setToasterMessage(x)
       setErrorToast(true)
+      
+      return
     }
-
-    setData(data);
     const timestamp = new Date().getTime();
-    console.log(data)
-    history.push(`/room/${data.roomName.toLowerCase().replace (/\s/g, '-')}-${timestamp}`);
+
+    const roomId = `${data.roomName.toLowerCase()
+      .replace (/\s/g, '-')}-${timestamp}`
+
+    await settingsService.saveRoomSettings(data, roomId)
+
+    history.push(`/room/${roomId}`);
   };
 
   return (
@@ -197,6 +203,7 @@ const CreateRoom = ({history}) => {
                   onIonChange={e => setValue("dayCycleDuration", e.detail.value)}
                 />
               </IonItem>
+              
               <IonButton type="submit" color="danger">
                 Let's play!
               </IonButton>

@@ -1,0 +1,15 @@
+.arena {
+  display: grid;
+}
+
+.hint {
+  display: block;
+  align-self: center;
+  justify-self: center;
+}
+
+.instruction {
+  margin-top: 10px;
+  display: block;
+  justify-self: center;
+}
