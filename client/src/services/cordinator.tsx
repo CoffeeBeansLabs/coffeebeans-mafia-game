@@ -1,4 +1,4 @@
-export const assignRoles = (players, roomId) => {
+export const assignRoles = (players) => {
   const settings = JSON.parse(localStorage.getItem('settings') || '')
   players = shufflePlayers(players)
 
@@ -13,7 +13,7 @@ export const assignRoles = (players, roomId) => {
   Object.keys(charactersCount)
     .forEach(character => {
     while (charactersCount[character]) {
-      players[playerIndex].character = character
+      players[playerIndex].role = character
 
       playerIndex++
       charactersCount[character]--

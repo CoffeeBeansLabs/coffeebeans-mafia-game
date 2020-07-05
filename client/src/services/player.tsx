@@ -22,15 +22,7 @@ export const registerPlayer = async (username, roomId, token, isCaptain=false) =
   // getActivePlayers
   const res = await getActivePlayers(roomId);
 
-  debugger;
   const activePlayers = res
-
-  // activePlayers.push({
-  //   name: username,
-  //   roomId: roomId ?? 'test',
-  //   token: token
-  // })
-
   // save on the backend as well
   localStorage.setItem('activePlayers', JSON.stringify(activePlayers));
   localStorage.setItem('username', username);

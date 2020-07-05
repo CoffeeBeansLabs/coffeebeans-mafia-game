@@ -88,6 +88,7 @@ app.post('/game-start', function (req, res) {
 
   res.setHeader('Content-Type', 'application/json')
   const roleDistribution = req.body.roleDistribution
+  console.log(roleDistribution)
   god.assignRoles(roleDistribution)
   god.setStartState(gameStates.currentState)
   samay.startTime()

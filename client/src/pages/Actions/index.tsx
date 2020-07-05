@@ -15,7 +15,6 @@ const Actions = ({ players, saveAction, currentCycle }) => {
       p.name === localStorage.getItem("username"))
 
     setCurrentUser(currentUser)
-    debugger;
     const i: any = getInstructionBasedOnCharacter(currentUser.role, currentCycle)
     setInstruction(i)
 

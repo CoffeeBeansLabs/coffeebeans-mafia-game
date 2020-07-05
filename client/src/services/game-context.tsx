@@ -17,13 +17,16 @@ export const setGameContext = async (roomId, gameContext, settings) => {
   const result = await axios({
     method: 'POST',
     url: `${API_BASE_URL}/game-start`,
-    data: { 
-      villagers: settings.villagers,
-      mafia: settings.mafia,
-      doctor: settings.doctor,
-      cop: settings.cop,
-     }
+    data: {
+      roleDistribution: { 
+        villagers: settings.villagers,
+        mafia: settings.mafia,
+        doctor: settings.doctor,
+        police: settings.cop,
+      }
+     },
   })
+
 
   localStorage.setItem("activePlayers", JSON.stringify(result.data.players))
   return localStorage.setItem("gameContext", JSON.stringify(gameContext))

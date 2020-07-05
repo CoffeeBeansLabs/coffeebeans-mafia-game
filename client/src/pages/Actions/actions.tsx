@@ -66,8 +66,8 @@ export const getInstructionBasedOnCharacter = (character, gameCycle) => {
 
 
 export const filterVotingList = (currentPlayer, list) => {
-  if (currentPlayer.character === 'mafia') {
-    list = list.filter(player =>  player !== 'mafia')
+  if (currentPlayer.role === 'mafia') {
+    list = list.filter(player => player.role !== 'mafia')
   }
 
   return list.filter(player => currentPlayer.name !== player.name)
