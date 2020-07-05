@@ -12,6 +12,7 @@ const Home: React.FC = () => {
       </IonHeader>
       <IonContent>
         <div className="container">
+          <div className="mafia-logo"><img src="assets/img/mafia_logo.jpg"></img></div>
           <strong>Coffebeans Consulting presents The Legendary MAFIA!</strong>
           <p>
             <IonButton fill="solid" color="secondary" routerLink="/create-room" routerDirection="root">Create a Room</IonButton>
