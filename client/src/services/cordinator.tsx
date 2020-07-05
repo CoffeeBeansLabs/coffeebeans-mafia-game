@@ -1,5 +1,6 @@
 export const assignRoles = (players) => {
   const settings = JSON.parse(localStorage.getItem('settings') || '')
+  console.log(players)
   players = shufflePlayers(players)
 
   let playerIndex = 0
@@ -13,14 +14,18 @@ export const assignRoles = (players) => {
   Object.keys(charactersCount)
     .forEach(character => {
     while (charactersCount[character]) {
-      players[playerIndex].role = character
+      if(players[playerIndex]) {
+        players[playerIndex].role = character
+      }
 
       playerIndex++
       charactersCount[character]--
     }
   })
 
-  localStorage.setItem('activePlayers', JSON.stringify(players))
+  return players
+
+  // localStorage.setItem('activePlayers', JSON.stringify(players))
 
   // save to backend
 };

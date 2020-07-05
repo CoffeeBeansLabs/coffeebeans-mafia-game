@@ -15,7 +15,7 @@ const Actions = ({ players, saveAction, currentCycle }) => {
       p.name === localStorage.getItem("username"))
 
     setCurrentUser(currentUser)
-    const i: any = getInstructionBasedOnCharacter(currentUser.role, currentCycle)
+    const i: any = getInstructionBasedOnCharacter('mafia', currentCycle)
     setInstruction(i)
 
     const list = filterVotingList(currentUser, players)

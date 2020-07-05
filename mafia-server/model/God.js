@@ -52,10 +52,14 @@ module.exports = class God {
 
   assignRoles (roleDistribution) {
     const shuffledPlayers = chance.shuffle(this.players)
+    console.log(this.player)
+    console.log(shuffledPlayers)
     let playerIndex = 0
     _.keys(roleDistribution).forEach(character => {
       while (roleDistribution[character]) {
-        shuffledPlayers[playerIndex].role = character
+        if(shuffledPlayers[playerIndex]) {
+          shuffledPlayers[playerIndex].role = character
+        }
 
         playerIndex++
         roleDistribution[character]--

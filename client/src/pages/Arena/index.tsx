@@ -78,7 +78,8 @@ const Arena = ({ players, minPlayers, roomId, switchCycle, token, gameContext, c
       {startGame ? (
         <>
           <span className="instruction">Hi {currentUser && currentUser.name}! 
-          Your role is {currentUser && currentUser.character && currentUser.character.toUpperCase()}</span>
+          Your role is {currentUser && currentUser.character && currentUser.character.toUpperCase() || 
+          'MAFIA'}</span>
 
           {room != null ? <VideoContainer 
             localParticipant={room.localParticipant}
